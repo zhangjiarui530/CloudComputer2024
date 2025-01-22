@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>黑色调对话页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #181818; /* 页面背景颜色 */
+            margin: 0;
+            padding: 0;
+            color: #fff; /* 默认文字颜色 */
+            height: 100vh; /* 设置页面高度为视口高度 */
+            display: flex;
+            flex-direction: column; /* 纵向排列 */
+        }
+        .chat-container {
+            flex: 1;
+            display: flex; /* 使用弹性布局 */
+            overflow: hidden; /* 防止子元素溢出 */
+        }
+        .history-box {
+            width: 300px; /* 设置历史记录框的宽度 */
+            padding: 20px;
+            overflow-y: auto; /* 允许纵向滚动 */
+            background-color: #303030; /* 历史记录背景颜色 */
+            border-right: 1px solid #444; /* 边界分隔线 */
+        }
+        .chat-box {
+            flex: 1; /* 占用剩余空间 */
+            padding: 20px;
+            overflow-y: auto; /* 允许纵向滚动 */
+            background-color: #252525; /* 聊天窗口背景颜色 */
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message.user {
+            text-align: right;
+            color: #4fc3f7; /* 用户消息颜色 */
+        }
+        .message.bot {
+            text-align: left;
+            color: #8bc34a; /* 机器人消息颜色 */
+        }
+        .input-area {
+            padding: 10px;
+            background-color: #303030; /* 输入区域背景 */
+            border-top: 1px solid #444; /* 边界分隔线 */
+        }
+        .input-area input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #404040; /* 输入框背景颜色 */
+            color: #fff;
+        }
+        .input-area button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .input-area button:hover {
+            background-color: #0056b3;
+        }
+        .history-item {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="chat-container">
+    <div class="history-box" id="history-box">
+        <h4>历史对话记录</h4>
+        <div id="history-content">
+            <!-- 历史记录将在这里显示 -->
+        </div>
+    </div>
+    <div class="chat-box" id="chat-box">
+        <!-- 消息将显示在这里 -->
+    </div>
+</div>
+
+<div class="input-area">
+    <input type="text" id="user-input" placeholder="输入您的消息...">
+    <button id="send-button">发送</button>
+</div>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const historyContent = document.getElementById('history-content');
+
+    sendButton.addEventListener('click', () => {
+        const userMessage = userInput.value.trim();
+        if (userMessage) {
+            // 显示用户消息
+            addMessage('user', userMessage);
+            addToHistory('用户: ' + userMessage); // 填写历史记录
+            userInput.value = '';
+
+            // 模拟机器人回复
+            setTimeout(() => {
+                const botResponse = '这是机器人对您的回复：' + userMessage;
+                addMessage('bot', botResponse);
+                addToHistory('机器人: ' + botResponse); // 填写历史记录
+            }, 1000);
+        }
+    });
+
+    // 允许按回车发送消息
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendButton.click();
+        }
+    });
+
+    function addMessage(sender, message) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', sender);
+        messageDiv.textContent = message;
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight; // 滚动到最新消息
+    }
+
+    function addToHistory(message) {
+        const historyItem = document.createElement('div');
+        historyItem.classList.add('history-item');
+        historyItem.textContent = message;
+        historyContent.appendChild(historyItem);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,139 @@
+@charset "utf-8";
+
+.head{
+	height: 60px;
+	width: 100%;
+	margin: 0;
+	background-color: #419eff;
+}
+.head-left-top{
+	width: 40%;
+	height: 20px;
+	float: left;
+	top:20px;
+	margin-left: 20px;
+	margin-bottom: 20px;
+}
+.head-left-top p{
+	font-size: 23px;
+	color: white;
+}
+.head-right-top{
+	width: 50%;
+	height: 20px;
+	float: right;
+
+	top:20px;
+	margin-bottom: 20px;
+}
+.head-right-top ul{
+	padding: 0;
+	list-style: none;
+	margin-right: 30px;
+}
+.head-right-top li {
+	float: right;
+	color: #ffffff;
+}
+.head-right-top ul li p{
+	color: #ffffff;
+}
+.head-right-top li a{
+	margin-left: 10px;
+	color: #ffffff;
+	text-decoration: none;
+}
+.head-right-top li a:hover{
+	color: #ffffff;
+	text-decoration: none;
+}
+.content-left ul{
+	font-size: 16px;
+	list-style-type: none;
+	padding: 0;
+	width: 160px;
+	height: 735px;
+	margin-top: -5px;
+	background-color: #f8f8ff;
+}
+.content-left li a{
+	display: block;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	color: #0c0303;
+	padding: 8px 16px;
+	text-decoration: none;
+}
+.content-left li a:hover{
+	color: #419eff;
+	background-color: #ffffff;
+}
+.content-left li ul{
+	display: none;
+	margin-top: 5px;
+}
+.content-left ul li:hover ul {
+
+	display: block;
+}
+.content-left li ul li{
+	height:47px;
+	line-height:47px;
+	text-align:left;
+	color: #0c0303;
+}
+.left_1 li ul a{
+	padding:0;
+	color: #0c0303;
+}
+.left_1 li ul li a:hover{
+	background: #ffffff;
+}
+.content_right{
+	position: absolute;
+	left: 170px;
+	top: 80px;
+}
+.content_table table{
+	width: 1320px;
+	height: 650px;
+	text-align: center;
+}
+.LR{
+	width:600px;
+	height: 500px;
+	float: left;
+	background-color: #1e1e1e; /* 深灰色背景 */
+}
+.Center{
+	width: 1300px;
+	height: 500px;
+	background-color: #d9f2fc;
+	margin-top: 100px;
+	margin-left: 110px;
+	left: 50%;
+	top: 50%;
+}
+.Center form input{
+	width: 400px;
+	height: 40px;
+	border-radius: 20px;
+	border-style: none;
+	background-color: #4CAF50;
+}
+.Center p{
+	text-align: center;
+	color: red;
+	font-size: 12px;
+}
+
+.check_identity {
+	width: 15px;
+	height: 15px;
+}
+
+
+
+
+
+

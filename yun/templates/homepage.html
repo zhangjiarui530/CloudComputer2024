@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>背景视频示例</title>
+    <style>
+        /* 让 html 和 body 高度为 100%，确保覆盖整个屏幕 */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        /*!* 容器样式 *!*/
+        /*.container {*/
+        /*    position: relative; !* 相对定位 *!*/
+        /*    top:48px;*/
+        /*    width: 100%;*/
+        /*    height: 94%;*/
+        /*    overflow: hidden; !* 隐藏溢出内容 *!*/
+        /*    z-index: -1;*/
+        /*}*/
+
+        /* 容器样式 */
+        .container {
+            position: relative; /* 相对定位 */
+            top:0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* 隐藏溢出内容 */
+            z-index: -1;
+        }
+
+        /* 背景视频样式 */
+        .background-video {
+            position: absolute; /* 固定位置 */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            /*object-fit: cover; !* 保持视频比例，填充背景 *!*/
+            z-index: -1; /* 确保视频处于背景 */
+        }
+
+        /* 背景遮罩层 */
+        body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8); /* 半透明黑色遮罩 */
+            z-index: 3; /* 遮罩层位于视频上方 */
+        }
+
+        /* 页面内容居中 */
+        .content {
+            position: absolute; /* 改为绝对定位 */
+            top: 50%; /* 从页面中间开始 */
+            left: 50%; /* 从页面中间开始 */
+            transform: translate(-50%, -50%); /* 通过平移使元素精确居中 */
+            z-index: 10; /* 确保内容显示在视频和遮罩上方 */
+            padding: 20px;
+            color: white;
+        }
+
+
+
+        /* 响应式导航栏设计 */
+        nav {
+            background-color: rgba(0, 0, 0, 0); /* 半透明背景 */
+            /*background-color: ;*/
+            overflow: hidden;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            justify-content: center; /* 将导航项居中对齐 */
+            align-items: center; /* 垂直居中 */
+
+        }
+
+        nav li {
+            display: inline-block;
+        }
+
+        nav a {
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+        }
+
+        nav a:hover {
+            background-color: #111;
+        }
+
+        /* 简化标题设计 */
+        h1 {
+            text-align: center;
+            font-size: 7em; /* 调整字号 */
+            margin-top: 10px;
+            font-weight: bold; /* 让标题加粗 */
+            color: #fff; /* 使用纯白色 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8); /* 轻微的文字阴影 */
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 1.8em;
+            margin-top: 20px;
+            color: #fff;
+        }
+
+                /* 按钮容器样式 */
+        .button-container {
+            position: absolute;
+            bottom: 240px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+        }
+
+        /* 按钮样式 */
+        .action-button {
+            background-color: rgba(0, 0, 0, 0.2); /* 半透明背景 */
+            color: white;
+            font-size: 1.2em;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 30px; /* 圆角效果 */
+            margin: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+        }
+
+        /* 按钮悬停效果 */
+        .action-button:hover {
+            background-color: rgba(0, 0, 0, 0.8);
+            transform: translateY(-5px); /* 按钮浮动效果 */
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="{{ url_for('homepage')}}">首页</a></li>
+            <li><a href="#">个人主页</a></li>
+            <li><a href="#">vip增值服务</a></li>
+            <li><a href="#">关于我们</a></li>
+            <li style=""><a href="#">联系我们</a></li>
+            <li style="float: right;"> &nbsp;&nbsp;</li>
+            <li style="float: right;"><a href="{{ url_for('login')}}" >登出</a></li>
+        </ul>
+
+    </nav>
+
+    <div class="container">
+    <!-- 背景视频 -->
+        <video class="background-video" autoplay loop muted style="object-fit: cover">
+            <source src="../static/images/background.mp4" type="video/mp4">
+        </video>
+    </div>
+
+<!--        &lt;!&ndash; 背景视频 &ndash;&gt;-->
+<!--    <video class="background-video" autoplay loop muted>-->
+<!--        <source src="../static/images/background.mp4" type="video/mp4">-->
+<!--    </video>-->
+
+    <!-- 页面内容 -->
+    <div class="content">
+<!--        <div style="font-family: 上首疾风书法体（非商用）;">-->
+
+<!--        <div style="font-family:'289-上首江湖书法体';">-->
+        <div style="font-family:'三极花朝体 粗';">
+            <h1>粤言</h1>
+        </div>
+    </div>
+
+    <!-- 按钮容器 -->
+    <div class="button-container">
+<!--        <a href="index.html">-->
+<!--            <button class="action-button" id="swim-btn" >游泳检测</button>-->
+<!--        </a>-->
+        <button class="action-button" id="swim-btn" onclick="location.href='index02'">文本翻译</button>
+        <button class="action-button" id="fall-btn" onclick="location.href='index18'">发音评价</button>
+        <button class="action-button" id="fight-btn" onclick="location.href='index26'">语音对话</button>
+    </div>
+</body>
+</html>

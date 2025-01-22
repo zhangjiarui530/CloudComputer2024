@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聊天应用</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #181818; /* 页面背景颜色 */
+            margin: 0;
+            padding: 0;
+            color: #fff; /* 默认文字颜色 */
+            display: flex; /* 使用弹性布局 */
+            height: 100vh; /* 设置页面高度为视口高度 */
+        }
+        .history-box {
+            width: 300px; /* 设置历史记录框的宽度 */
+            padding: 20px;
+            overflow-y: auto; /* 允许纵向滚动 */
+            background-color: #303030; /* 历史记录背景颜色 */
+            border-right: 1px solid #444; /* 边界分隔线 */
+        }
+        .chat-container {
+            flex: 1; /* 占用剩余空间 */
+            display: flex;
+            flex-direction: column; /* 纵向排列 */
+            padding: 20px;
+            background-color: #252525; /* 聊天窗口背景颜色 */
+        }
+        .chat-box {
+            flex: 1; /* 占用剩余空间 */
+            overflow-y: auto; /* 允许纵向滚动 */
+        }
+        .message {
+            margin-bottom: 10px;
+        }
+        .message.user {
+            text-align: right;
+            color: #4fc3f7; /* 用户消息颜色 */
+        }
+        .message.bot {
+            text-align: left;
+            color: #8bc34a; /* 机器人消息颜色 */
+        }
+        .input-area {
+            padding: 10px;
+            background-color: #303030; /* 输入区域背景 */
+            border-top: 1px solid #444; /* 边界分隔线 */
+            display: flex; /* 使用弹性布局 */
+        }
+        .input-area input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #404040; /* 输入框背景颜色 */
+            color: #fff;
+        }
+        .input-area button {
+            padding: 10px 15px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 5px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .input-area button:hover {
+            background-color: #0056b3;
+        }
+        .history-item {
+            margin-bottom: 8px;
+        }
+        .date-header {
+            margin: 10px 0;
+            font-size: 0.9em;
+            color: #aaa;
+            text-align: center;
+        }
+        .date-button {
+            display: block; /* 使按钮作为块级元素 */
+            width: 100%; /* 填满父容器的宽度 */
+            background-color: #555; /* 按钮背景颜色 */
+            padding: 15px; /* 增加内边距 */
+            border-radius: 5px; /* 圆角 */
+            text-align: center; /* 居中对齐文本 */
+            color: #fff; /* 文字颜色 */
+            cursor: pointer; /* 鼠标悬停时变成光标 */
+            font-size: 1em; /* 调整字体大小 */
+            border: none; /* 去掉边框 */
+            transition: background-color 0.3s; /* 平滑背景颜色过渡 */
+        }
+        .date-button:hover {
+            background-color: #777; /* 悬停时的背景颜色 */
+        }
+    </style>
+</head>
+<body>
+
+<div class="history-box" id="history-box">
+    <h4>历史对话记录</h4>
+    <div id="history-content">
+        <!-- 历史记录将在这里显示 -->
+    </div>
+</div>
+
+<div class="chat-container">
+    <div class="chat-box" id="chat-box">
+        <!-- 消息将显示在这里 -->
+    </div>
+    <div class="input-area">
+        <input type="text" id="user-input" placeholder="输入您的消息...">
+        <button id="send-button">发送</button>
+    </div>
+</div>
+
+<script>
+    const chatBox = document.getElementById('chat-box');
+    const userInput = document.getElementById('user-input');
+    const sendButton = document.getElementById('send-button');
+    const historyContent = document.getElementById('history-content');
+
+    sendButton.addEventListener('click', async () => {
+        const userMessage = userInput.value.trim();
+        if (userMessage) {
+            const currentDate = new Date().toLocaleDateString(); // 获取当前日期
+            addMessage('user', userMessage, currentDate);
+            addToHistory(currentDate); // 只记录日期
+            userInput.value = '';
+
+            // 发送用户消息到后端
+            try {
+                const response = await fetch('/api/message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ message: userMessage })
+                });
+
+                const data = await response.json();
+                const botResponse = data.response; // 获取后端返回的响应
+                addMessage('bot', botResponse, currentDate);
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+    });
+
+    // 允许按回车发送消息
+    userInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            sendButton.click();
+        }
+    });
+
+    function addMessage(sender, message, date) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('message', sender);
+        messageDiv.textContent = message;
+        chatBox.appendChild(messageDiv);
+        chatBox.scrollTop = chatBox.scrollHeight; // 滚动到最新消息
+    }
+
+    function addToHistory(date) {
+        // 创建一个查找日期元素的函数
+        function dateAlreadyExists(date) {
+            const existingHeaders = document.querySelectorAll('.date-button');
+            for (const header of existingHeaders) {
+                if (header.textContent === date) {
+                    return true; // 日期已经存在
+                }
+            }
+            return false; // 日期不存在
+        }
+
+        // 如果日期不存在，则添加日期按钮
+        if (!dateAlreadyExists(date)) {
+            const dateHeader = document.createElement('button');
+            dateHeader.classList.add('date-button');
+            dateHeader.textContent = date; // 设置为当前日期
+            historyContent.appendChild(dateHeader);
+
+            // 添加点击事件处理程序
+            dateHeader.addEventListener('click', () => {
+                alert('您点击了日期: ' + date); // 处理日期点击事件，您可以根据需要修改
+            });
+        }
+    }
+</script>
+
+</body>
+</html>
